@@ -36,4 +36,10 @@ describe("a valid model", function(done) {
   it("hashes the password using bcrypt", function() {
     expect(createResult.dataValues.password).to.startsWith('$2a$');
   });
+
+  it("is stored in the db", function() {
+    orm.models.User.findById(createResult.userId).then(function(user) {
+      expect(user).to.exist;
+    });
+  });
 });
