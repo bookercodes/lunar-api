@@ -6,22 +6,32 @@ chai.use(chaiStr);
 const expect = chai.expect;
 
 describe("a valid model", function(done) {
+
   let createResult;
+
   const user = {
     username: "username",
     email: "email@email.com",
     password: "password"
-  }
+  };
+
   before(function(done) {
+    orm.logger = false;
     orm.discover = [__dirname + '/../models/'];
-    orm.connect("lunar_schema", "root", "");
+    orm.connect("lunar_schema", "root", "", {
+      logging: false
+    });
     orm.sequelize.sync({
       force: true
     }).then(function() {
-      return orm.models.User.create(user).then(function(result) {
-        createResult = result;
-        done();
-      });
+      orm
+        .models
+        .User
+        .create(user)
+        .then(function(result) {
+          createResult = result;
+          done();
+        });
     });
   });
 
@@ -38,8 +48,12 @@ describe("a valid model", function(done) {
   });
 
   it("is stored in the db", function() {
-    orm.models.User.findById(createResult.userId).then(function(user) {
-      expect(user).to.exist;
-    });
+    orm
+      .models
+      .User
+      .findById(createResult.userId)
+      .then(function(user) {
+        expect(user).to.exist;
+      });
   });
 });

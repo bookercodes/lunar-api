@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     hooks: {
       afterValidate: function(user) {
-        user.password = bcrypt.hashSync(user.password, 12);
+        user.password = bcrypt.hashSync(user.password, 8);
       }
     }
   });
