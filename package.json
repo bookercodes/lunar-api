@@ -1,5 +1,13 @@
 {
   "dependencies": {
     "babel": "^5.8.23"
+  },
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3"
+  },
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "mocha ./tests --compilers js:babel/register"
   }
 }
