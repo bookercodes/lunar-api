@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "babel": "^5.8.23",
+    "mysql": "^2.9.0",
     "sequelize": "^3.11.0"
   },
   "devDependencies": {
