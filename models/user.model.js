@@ -16,7 +16,10 @@ module.exports = function(sequelize, DataTypes) {
         isEmail: true
       }
     },
-    username: DataTypes.TEXT,
+    username: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
     password: DataTypes.TEXT
   }, {
     hooks: {

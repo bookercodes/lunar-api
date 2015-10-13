@@ -19,6 +19,27 @@ describe("user", function() {
       done();
     });
   });
+  
+  describe("a null username", function(done) {
+    it("is not successful", function(done) {
+      orm
+        .models
+        .User
+        .create({
+          username: null,
+          email: "foo@foo.com",
+          password: "password"
+        })
+        .then(function() {
+          expect.fail();
+          done();
+        })
+        .catch(orm.Sequelize.ValidationError, function() {
+          expect("everthing").to.be.ok;
+          done();
+        });
+    });
+  });
 
   describe("a null email", function(done) {
     it("is not successful", function(done) {
