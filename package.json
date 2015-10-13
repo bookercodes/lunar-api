@@ -15,6 +15,6 @@
   },
   "scripts": {
     "start": "nodemon index.js",
-    "test": "mocha ./tests --compilers js:babel/register"
+    "test": "mocha ./tests -w --compilers js:babel/register"
   }
 }
