@@ -68,7 +68,7 @@ describe("user", function() {
         .User
         .create({
           username: "",
-          email: "email",
+          email: "email@email.com",
           password: "password"
         })
         .then(function() {

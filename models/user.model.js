@@ -18,7 +18,10 @@ module.exports = function(sequelize, DataTypes) {
     },
     username: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
     },
     password: {
       type: DataTypes.TEXT,
