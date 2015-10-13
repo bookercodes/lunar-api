@@ -40,6 +40,27 @@ describe("user", function() {
         });
     });
   });
+
+  describe("an empty password", function(done) {
+    it("is not successful", function(done) {
+      orm
+        .models
+        .User
+        .create({
+          username: "user",
+          email: "foo@foo.com",
+          password: ""
+        })
+        .then(function() {
+          expect.fail();
+          done();
+        })
+        .catch(orm.Sequelize.ValidationError, function() {
+          expect("everthing").to.be.ok;
+          done();
+        });
+    });
+  });
   describe("a null username", function(done) {
     it("is not successful", function(done) {
       orm

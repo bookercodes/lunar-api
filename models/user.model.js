@@ -25,7 +25,10 @@ module.exports = function(sequelize, DataTypes) {
     },
     password: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
     }
   }, {
     hooks: {
