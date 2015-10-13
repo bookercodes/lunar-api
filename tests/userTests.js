@@ -21,19 +21,15 @@ describe("user", function() {
   });
 
   describe("an invalid email", function(done) {
-
-    let createResult;
-    const user = {
-      username: "username",
-      email: "",
-      password: "password"
-    };
-    
     it("is not successful", function(done) {
       orm
         .models
         .User
-        .create(user)
+        .create({
+          username: "username",
+          email: "",
+          password: "password"
+        })
         .then(function() {
           expect.fail();
           done();
