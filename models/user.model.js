@@ -20,7 +20,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    password: DataTypes.TEXT
+    password: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    }
   }, {
     hooks: {
       afterValidate: function(user) {
