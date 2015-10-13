@@ -9,6 +9,12 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true,
       type: DataTypes.INTEGER 
     },
+    email: {
+      type: DataTypes.TEXT,
+      validate: {
+        isEmail: true
+      }
+    },
     username: DataTypes.TEXT,
     password: DataTypes.TEXT
   }, {

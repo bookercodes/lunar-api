@@ -20,6 +20,31 @@ describe("user", function() {
     });
   });
 
+  describe("an invalid email", function(done) {
+
+    let createResult;
+    const user = {
+      username: "username",
+      email: "",
+      password: "password"
+    };
+    
+    it("is not successful", function(done) {
+      orm
+        .models
+        .User
+        .create(user)
+        .then(function() {
+          expect.fail();
+          done();
+        })
+        .catch(orm.Sequelize.ValidationError, function() {
+          expect("everthing").to.be.ok;
+          done();
+        });
+    });
+  });
+
   describe("a valid model", function(done) {
 
     let createResult;
