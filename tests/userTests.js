@@ -68,6 +68,7 @@ describe("user", function() {
         });
     });
   });
+
   describe("a null username", function(done) {
     it("is not successful", function(done) {
       orm
@@ -232,4 +233,5 @@ describe("user", function() {
         });
     });
   });
+
 });
