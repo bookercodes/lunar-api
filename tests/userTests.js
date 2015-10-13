@@ -5,15 +5,7 @@ import orm from '../lib/orm';
 chai.use(chaiStr);
 const expect = chai.expect;
 
-describe("a valid model", function(done) {
-
-  let createResult;
-
-  const user = {
-    username: "username",
-    email: "email@email.com",
-    password: "password"
-  };
+describe("user", function() {
 
   before(function(done) {
     orm.logger = false;
@@ -24,6 +16,21 @@ describe("a valid model", function(done) {
     orm.sequelize.sync({
       force: true
     }).then(function() {
+      done();
+    });
+  });
+
+  describe("a valid model", function(done) {
+
+    let createResult;
+
+    const user = {
+      username: "username",
+      email: "email@email.com",
+      password: "password"
+    };
+
+    before(function(done) {
       orm
         .models
         .User
@@ -33,27 +40,27 @@ describe("a valid model", function(done) {
           done();
         });
     });
-  });
 
-  it("returns userId", function() {
-    expect(createResult.dataValues.userId).to.exist;
-  });
+    it("returns userId", function() {
+      expect(createResult.dataValues.userId).to.exist;
+    });
 
-  it("does not store the password in plaintext", function() {
-    expect(createResult.dataValues.password).to.not.equal(user.password);
-  });
+    it("does not store the password in plaintext", function() {
+      expect(createResult.dataValues.password).to.not.equal(user.password);
+    });
 
-  it("hashes the password using bcrypt", function() {
-    expect(createResult.dataValues.password).to.startsWith('$2a$');
-  });
+    it("hashes the password using bcrypt", function() {
+      expect(createResult.dataValues.password).to.startsWith('$2a$');
+    });
 
-  it("is stored in the db", function() {
-    orm
-      .models
-      .User
-      .findById(createResult.userId)
-      .then(function(user) {
-        expect(user).to.exist;
-      });
+    it("is stored in the db", function() {
+      orm
+        .models
+        .User
+        .findById(createResult.userId)
+        .then(function(user) {
+          expect(user).to.exist;
+        });
+    });
   });
 });
