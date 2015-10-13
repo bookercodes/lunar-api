@@ -29,3 +29,18 @@ This directory contains "utility" code. Anything you might be tempted to put in 
 
 The _`/tests`_ directory is for unit **and** integration tests. It would be a good idea to seperate unit and integration tests.
 
+## Files
+
+**_`index.js`_**
+
+This file is a shim for [Babel](https://babeljs.io/). It exists so we can use ES6 and that is all
+
+**_`routes.js`_**
+
+Use this file to define routes **only**. Business logic should be deferred to controllers.
+
+
+**_`server.js`_**
+
+Use this file to mount Express middleware. Also use this file to initialize the application.
+
