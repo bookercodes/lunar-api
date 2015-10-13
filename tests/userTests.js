@@ -41,6 +41,27 @@ describe("user", function() {
     });
   });
 
+  describe("an empty username", function(done) {
+    it("is not successful", function(done) {
+      orm
+        .models
+        .User
+        .create({
+          username: "fo",
+          email: "email",
+          password: "password"
+        })
+        .then(function() {
+          expect.fail();
+          done();
+        })
+        .catch(orm.Sequelize.ValidationError, function() {
+          expect("everthing").to.be.ok;
+          done();
+        });
+    });
+  });
+
   describe("a null email", function(done) {
     it("is not successful", function(done) {
       orm
@@ -61,6 +82,7 @@ describe("user", function() {
         });
     });
   });
+
   describe("an invalid email", function(done) {
     it("is not successful", function(done) {
       orm
