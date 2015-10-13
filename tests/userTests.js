@@ -34,8 +34,11 @@ describe("user", function() {
           expect.fail();
           done();
         })
-        .catch(orm.Sequelize.ValidationError, function() {
-          expect("everthing").to.be.ok;
+        .catch(orm.Sequelize.ValidationError, function(result) {
+          expect(result.errors).to.have.length(1);
+          const error = result.errors.shift();
+          expect(error.type).to.contain("notNull");
+          expect(error.path).to.equal("password");
           done();
         });
     });
@@ -55,8 +58,12 @@ describe("user", function() {
           expect.fail();
           done();
         })
-        .catch(orm.Sequelize.ValidationError, function() {
-          expect("everthing").to.be.ok;
+        .catch(orm.Sequelize.ValidationError, function(result) {
+          expect(result.errors).to.have.length(1);
+          const error = result.errors.shift();
+          expect(error.type).to.contain("Validation error");
+          expect(error.value).to.contain("notEmpty");
+          expect(error.path).to.equal("password");
           done();
         });
     });
@@ -75,8 +82,11 @@ describe("user", function() {
           expect.fail();
           done();
         })
-        .catch(orm.Sequelize.ValidationError, function() {
-          expect("everthing").to.be.ok;
+        .catch(orm.Sequelize.ValidationError, function(result) {
+          expect(result.errors).to.have.length(1);
+          const error = result.errors.shift();
+          expect(error.type).to.contain("notNull");
+          expect(error.path).to.equal("username");
           done();
         });
     });
@@ -96,8 +106,12 @@ describe("user", function() {
           expect.fail();
           done();
         })
-        .catch(orm.Sequelize.ValidationError, function() {
-          expect("everthing").to.be.ok;
+        .catch(orm.Sequelize.ValidationError, function(result) {
+          expect(result.errors).to.have.length(1);
+          const error = result.errors.shift();
+          expect(error.type).to.contain("Validation error");
+          expect(error.value).to.contain("notEmpty");
+          expect(error.path).to.equal("username");
           done();
         });
     });
@@ -117,8 +131,11 @@ describe("user", function() {
           expect.fail();
           done();
         })
-        .catch(orm.Sequelize.ValidationError, function() {
-          expect("everthing").to.be.ok;
+        .catch(orm.Sequelize.ValidationError, function(result) {
+          expect(result.errors).to.have.length(1);
+          const error = result.errors.shift();
+          expect(error.type).to.contain("notNull");
+          expect(error.path).to.equal("email");
           done();
         });
     });
@@ -138,8 +155,12 @@ describe("user", function() {
           expect.fail();
           done();
         })
-        .catch(orm.Sequelize.ValidationError, function() {
-          expect("everthing").to.be.ok;
+        .catch(orm.Sequelize.ValidationError, function(result) {
+          expect(result.errors).to.have.length(1);
+          const error = result.errors.shift();
+          expect(error.type).to.contain("Validation error");
+          expect(error.value).to.contain("isEmail");
+          expect(error.path).to.equal("email");
           done();
         });
     });
@@ -159,8 +180,10 @@ describe("user", function() {
           expect.fail();
           done();
         })
-        .catch(orm.Sequelize.ValidationError, function() {
-          expect("everthing").to.be.ok;
+        .catch(orm.Sequelize.ValidationError, function(result) {
+          expect(result.errors).to.have.length(1);
+          const error = result.errors.shift();
+          expect(error.path).to.equal("email");
           done();
         });
     });
