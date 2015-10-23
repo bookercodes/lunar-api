@@ -8,4 +8,16 @@ describe("join", function() {
       .post("/users")
       .expect(400, done);
   });
+
+  it("should return 200 when body is specified", function(done) {
+    request(server)
+      .post("/users")
+      .set('Content-Type', 'application/json')
+      .send({
+        username: "foo",
+        email: "foo@bar.co",
+        password: "bar"
+      })
+      .expect(201, done);
+  });
 });
