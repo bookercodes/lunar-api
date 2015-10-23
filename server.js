@@ -5,4 +5,7 @@ const app = express();
 
 app.use(routes);
 
+
 app.listen(8080);
+
+export default app;
