@@ -1,6 +1,6 @@
 import chai from "chai";
 import chaiStr from 'chai-string';
-import orm from '../lib/orm';
+import orm from '../../lib/orm';
 
 chai.use(chaiStr);
 const expect = chai.expect;
@@ -9,7 +9,7 @@ describe("user", function() {
 
   before(function(done) {
     orm.logger = false;
-    orm.discover = [__dirname + '/../models/'];
+    orm.discover = [__dirname + '/../../models/'];
     orm.connect("lunar_schema", "root", "", {
       logging: false
     });
