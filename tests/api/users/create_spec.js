@@ -5,12 +5,12 @@ import server from "../../../";
 const expect = chai.expect;
 
 describe("/users api", function() {
-
+  
   describe("create (post)", function() {
 
     describe("an empty model", function() {
       it("should return 400", function(done) {
-        request(server)
+        request(server.app)
           .post("/users")
           .expect(400, done);
       });
@@ -18,7 +18,7 @@ describe("/users api", function() {
 
     describe("a valid model", function() {
       it("should return 201", function(done) {
-        request(server)
+        request(server.app)
           .post("/users")
           .set("Content-Type", "application/json")
           .send({
@@ -32,7 +32,7 @@ describe("/users api", function() {
 
     describe("an erroneous  model", function() {
       it("should return 400", function() {
-        request(server)
+        request(server.app)
           .post("/users")
           .send({
             username: "",
@@ -49,4 +49,6 @@ describe("/users api", function() {
       });
     });
   });
+
+  after(() => server.server.close());
 });

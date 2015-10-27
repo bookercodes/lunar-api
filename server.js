@@ -16,6 +16,11 @@ app.use(function(err, req, res, next) {
   next();
 });
 
-app.listen(8080);
+const server = app.listen(8080);
 
-export default app;
+export default {
+  app: app,
+  server: server
+};
+
+
