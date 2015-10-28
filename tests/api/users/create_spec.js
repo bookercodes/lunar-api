@@ -1,11 +1,31 @@
 import chai from "chai";
 import request from "supertest";
 import server from "../../../";
+import orm from "../../../lib/orm";
+import config from "config";
 
 const expect = chai.expect;
 
 describe("/users api", function() {
-  
+
+
+  before(function(done) {
+    orm.logger = false;
+    orm.discover = [__dirname + '/../../../models/'];
+    orm.connect(config.db.name, config.db.user, config.db.pass, {
+      logging: false,
+      dialect: config.db.dialect
+    });
+    orm
+      .sequelize
+      .sync({
+        force: true
+      }).then(function() {
+        done();
+      });
+    done();
+  });
+
   describe("create (post)", function() {
 
     describe("an empty model", function() {
@@ -28,6 +48,36 @@ describe("/users api", function() {
           })
           .expect(201, done);
       });
+      it("should store user in db", function(done) {
+        const model = {
+          username: "username",
+          email: "username@domain.com",
+          password: "password123"
+        };
+        request(server.app)
+          .post("/users")
+          .send(model)
+          .expect(201)
+          .end(function(err, res) {
+            orm
+              .models
+              .User
+              .findOne({
+                where: {
+                  username: model.username
+                }
+              })
+              .then(function(user) {
+                expect(user).to.exist;
+                user = user.dataValues;
+                expect(user.id).to.exist;
+                expect(user.username).to.equal(model.username);
+                expect(user.password).to.not.equal(model.password);
+                done();
+              });
+          });
+      });
+
     });
 
     describe("an erroneous  model", function() {

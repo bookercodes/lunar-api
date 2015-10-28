@@ -1,6 +1,20 @@
 import express from 'express';
 import routes from './routes';
 import bodyParser from "body-parser";
+import config from "config";
+import orm from "./lib/orm";
+
+orm.logger = false;
+orm.discover = [__dirname + '/models/'];
+orm.connect(config.db.name, config.db.user, config.db.pass, {
+  logging: false,
+  dialect: config.db.dialect
+});
+orm
+  .sequelize
+  .sync({
+    force: false
+  });
 
 const app = express();
 
