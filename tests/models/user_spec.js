@@ -1,6 +1,7 @@
 import chai from "chai";
 import chaiStr from 'chai-string';
 import orm from '../../lib/orm';
+import config from "config";
 
 chai.use(chaiStr);
 const expect = chai.expect;
@@ -9,9 +10,9 @@ describe("user", function() {
   before(function(done) {
     orm.logger = false;
     orm.discover = [__dirname + '/../../models/'];
-    orm.connect("", "", "", {
+    orm.connect(config.db.name, config.db.user, config.db.pass, {
       logging: false,
-      dialect: "sqlite"
+      dialect: config.db.dialect
     });
     orm
       .sequelize
