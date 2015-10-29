@@ -13,7 +13,7 @@ orm.connect(config.db.name, config.db.user, config.db.pass, {
 orm
   .sequelize
   .sync({
-    force: false
+    force: true
   });
 
 const app = express();

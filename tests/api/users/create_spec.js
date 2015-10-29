@@ -9,22 +9,6 @@ const expect = chai.expect;
 describe("/users api", function() {
 
 
-  before(function(done) {
-    orm.logger = false;
-    orm.discover = [__dirname + '/../../../models/'];
-    orm.connect(config.db.name, config.db.user, config.db.pass, {
-      logging: false,
-      dialect: config.db.dialect
-    });
-    orm
-      .sequelize
-      .sync({
-        force: true
-      }).then(function() {
-        done();
-      });
-    done();
-  });
 
   describe("create (post)", function() {
 
@@ -37,6 +21,14 @@ describe("/users api", function() {
     });
 
     describe("a valid model", function() {
+      beforeEach(function(done) {
+        orm
+          .sequelize
+          .sync({
+            force: true
+          })
+          .then(() => done());
+      });
       it("should return 201", function(done) {
         request(server.app)
           .post("/users")
@@ -70,7 +62,7 @@ describe("/users api", function() {
               .then(function(user) {
                 expect(user).to.exist;
                 user = user.dataValues;
-                expect(user.id).to.exist;
+                expect(user.userId).to.exist;
                 expect(user.username).to.equal(model.username);
                 expect(user.password).to.not.equal(model.password);
                 done();
