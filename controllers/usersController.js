@@ -15,6 +15,9 @@ export default {
       .create(model)
       .then(function(user) {
         return res.sendStatus(201);
+      })
+      .catch(orm.Sequelize.UniqueConstraintError, function(err) {
+        return res.sendStatus(400);
       });
   }
 };

@@ -18,6 +18,7 @@ describe("/users api", function() {
       });
     });
 
+
     describe("a valid model", function() {
       beforeEach(function(done) {
         orm
@@ -86,6 +87,35 @@ describe("/users api", function() {
             expect(res.body[0].path).to.equal("body.username");
             done();
           });
+      });
+    });
+
+    describe("duplicate username", function() {
+      beforeEach(function(done) {
+        orm
+          .sequelize
+          .sync({
+            force: true
+          })
+          .then(() => done());
+      });
+      it("should return 400", function(done) {
+        const model = {
+          username: "username",
+          email: "username@domain.com",
+          password: "password123"
+        };
+        orm
+          .models
+          .User
+          .create(model)
+          .then(function() {
+            request(server.app)
+              .post("/users")
+              .send(model)
+              .expect(400, done);
+          });
+
       });
     });
   });
