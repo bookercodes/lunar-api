@@ -100,25 +100,63 @@ describe("/users api", function() {
           .then(() => done());
       });
       it("should return 400", function(done) {
-        const model = {
-          username: "username",
-          email: "username@domain.com",
-          password: "password123"
-        };
+        const username = "username";
         orm
           .models
           .User
-          .create(model)
+          .create({
+            username: username,
+            email: "username@domain.com",
+            password: "password123"
+          })
           .then(function() {
             request(server.app)
               .post("/users")
-              .send(model)
+              .send({
+                username: username,
+                email: "username1@domain.com",
+                password: "password123"
+              })
+              .expect(400, done);
+          });
+
+      });
+    });
+
+    describe("duplicate email", function() {
+      beforeEach(function(done) {
+        orm
+          .sequelize
+          .sync({
+            force: true
+          })
+          .then(() => done());
+      });
+      it("should return 400", function(done) {
+        const email = "username@domain.com";
+        orm
+          .models
+          .User
+          .create({
+            username: "username",
+            email: email,
+            password: "password123"
+          })
+          .then(function() {
+            request(server.app)
+              .post("/users")
+              .send({
+                username: "username1",
+                email: email,
+                password: "password123"
+              })
               .expect(400, done);
           });
 
       });
     });
   });
+
 
   after(() => server.server.close());
 });
