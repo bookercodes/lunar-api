@@ -8,8 +8,6 @@ const expect = chai.expect;
 
 describe("/users api", function() {
 
-
-
   describe("create (post)", function() {
 
     describe("an empty model", function() {
