@@ -1,7 +1,7 @@
 import orm from "../lib/orm";
 
 export default {
-  create: function(req, res) {
+  create(req, res) {
     
     const model = {
       username: req.body.username,
