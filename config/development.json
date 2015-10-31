@@ -1,0 +1,7 @@
+{
+  "database": "lunar_schema",
+  "password": "",
+  "dialect": "mysql",
+  "username": "root"
+}
+

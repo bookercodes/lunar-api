@@ -1,10 +1,7 @@
 import express from 'express';
 import routes from './routes';
 import bodyParser from "body-parser";
-
-const env = process.env.NODE_ENV || "development";
-const config = require("./config/config.json")[env];
-
+import config from "config";
 import orm from "./lib/orm";
 
 orm.logger = false;
