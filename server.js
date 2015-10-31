@@ -3,7 +3,7 @@ import routes from './routes';
 import bodyParser from "body-parser";
 
 const env = process.env.NODE_ENV || "development";
-const config = require("./config/")[env];
+const config = require("./config/config.json")[env];
 
 import orm from "./lib/orm";
 
