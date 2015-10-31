@@ -1,14 +1,17 @@
 import express from 'express';
 import routes from './routes';
 import bodyParser from "body-parser";
-import config from "config";
+
+const env = process.env.NODE_ENV || "development";
+const config = require("./config/")[env];
+
 import orm from "./lib/orm";
 
 orm.logger = false;
 orm.discover = [__dirname + '/models/'];
-orm.connect(config.db.name, config.db.user, config.db.pass, {
+orm.connect(config.database, config.username, config.password, {
   logging: false,
-  dialect: config.db.dialect
+  dialect: config.dialect
 });
 
 const app = express();

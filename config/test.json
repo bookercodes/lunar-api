@@ -1,8 +1,0 @@
-{
-  "db": {
-    "name": "lunar_schema",
-    "user": "root",
-    "pass": "",
-    "dialect": "mysql"
-  }
-}
