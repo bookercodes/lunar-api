@@ -2,11 +2,9 @@ import express from 'express';
 import routes from './routes';
 import bodyParser from "body-parser";
 import config from "config";
-import orm from "./lib/orm";
+import dbContext from "sequelize-context";
 
-orm.logger = false;
-orm.discover = [__dirname + '/models/'];
-orm.connect(config.database, config.username, config.password, {
+dbContext.connect(config.database, config.username, config.password, {
   logging: false,
   dialect: config.dialect
 });

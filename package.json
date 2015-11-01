@@ -8,7 +8,8 @@
     "express-joi-validator": "^2.0.0",
     "joi": "^6.9.1",
     "mysql": "^2.9.0",
-    "sequelize": "^3.11.0"
+    "sequelize": "^3.11.0",
+    "sequelize-context": "0.0.4"
   },
   "devDependencies": {
     "chai": "^3.3.0",
