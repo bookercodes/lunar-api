@@ -1,6 +1,6 @@
 import chai from "chai";
 import chaiStr from 'chai-string';
-import orm from '../../lib/orm';
+import dbContext from 'sequelize-context';
 import config from "config";
 
 chai.use(chaiStr);
@@ -8,14 +8,12 @@ const expect = chai.expect;
 
 describe("user", function() {
   before(function(done) {
-    orm.logger = false;
-    orm.discover = [__dirname + '/../../models/'];
-    orm.connect(config.db.name, config.db.user, config.db.pass, {
+    dbContext.connect(config.database, config.username, config.password, {
       logging: false,
-      dialect: config.db.dialect
+      dialect: config.dialect
     });
-    orm
-      .sequelize
+    dbContext
+      .connection
       .sync({
         force: true
       }).then(function() {
@@ -34,7 +32,7 @@ describe("user", function() {
     };
 
     before(function(done) {
-      orm
+      dbContext
         .models
         .User
         .create(user)

@@ -1,7 +1,7 @@
 import chai from "chai";
 import request from "supertest";
 import server from "../../../";
-import orm from "../../../lib/orm";
+import dbContext from "sequelize-context";
 import config from "config";
 
 const expect = chai.expect;
@@ -21,8 +21,8 @@ describe("/users api", function() {
 
     describe("a valid model", function() {
       beforeEach(function(done) {
-        orm
-          .sequelize
+        dbContext
+          .connection
           .sync({
             force: true
           })
@@ -50,7 +50,7 @@ describe("/users api", function() {
           .send(model)
           .expect(201)
           .end(function(err, res) {
-            orm
+            dbContext
               .models
               .User
               .findOne({
@@ -92,8 +92,8 @@ describe("/users api", function() {
 
     describe("duplicate username", function() {
       beforeEach(function(done) {
-        orm
-          .sequelize
+        dbContext
+          .connection
           .sync({
             force: true
           })
@@ -101,7 +101,7 @@ describe("/users api", function() {
       });
       it("should return 400", function(done) {
         const username = "username";
-        orm
+        dbContext
           .models
           .User
           .create({
@@ -125,8 +125,8 @@ describe("/users api", function() {
 
     describe("duplicate email", function() {
       beforeEach(function(done) {
-        orm
-          .sequelize
+        dbContext
+          .connection
           .sync({
             force: true
           })
@@ -134,7 +134,7 @@ describe("/users api", function() {
       });
       it("should return 400", function(done) {
         const email = "username@domain.com";
-        orm
+        dbContext
           .models
           .User
           .create({

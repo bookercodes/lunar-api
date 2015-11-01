@@ -1,4 +1,4 @@
-import orm from "../lib/orm";
+import dbContext from "sequelize-context";
 
 export default {
   create(req, res) {
@@ -9,7 +9,7 @@ export default {
       email: req.body.email
     };
     
-    orm
+    dbContext
       .models
       .User
       .create(model)
