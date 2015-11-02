@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
     userId: {
       primaryKey: true,
       autoIncrement: true,
-      type: DataTypes.INTEGER 
+      type: DataTypes.INTEGER
     },
     email: {
       type: DataTypes.STRING,
@@ -31,6 +31,12 @@ module.exports = function(sequelize, DataTypes) {
       validate: {
         notEmpty: true
       }
+    },
+    createdAt: {
+      type: DataTypes.DATE
+    },
+    updatedAt: {
+      type: DataTypes.DATE
     }
   }, {
     hooks: {
