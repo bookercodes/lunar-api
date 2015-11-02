@@ -23,11 +23,8 @@ app.use(function(err, req, res, next) {
   next();
 });
 
-const server = app.listen(8080);
+if (!module.parent)
+  app.listen(8080);
 
-export default {
-  app: app,
-  server: server
-};
-
+export default app;
 
