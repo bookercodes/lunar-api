@@ -6,7 +6,7 @@ import dbContext from "sequelize-context";
 import prettyError from "pretty-error";
 import process from "process";
 
-//prettyError.start();
+prettyError.start();
 
 dbContext.connect(config.database, config.username, config.password, {
   logging: false,
