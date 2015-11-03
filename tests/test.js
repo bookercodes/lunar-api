@@ -7,6 +7,14 @@ const expect = chai.expect;
 const request = require("supertest")(server.listen());
 
 describe("foo", function() {
+  beforeEach(function(done) {
+    dbContext.connection.sync({
+      force: true
+    }).then(function() {
+      done();
+    });
+  });
+
   it("should return 400", function(done) {
     request
       .post("/users")
