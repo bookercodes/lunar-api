@@ -8,16 +8,16 @@ export default {
       password: req.body.password,
       email: req.body.email
     };
-    
+     
     dbContext
       .models
       .User
       .create(model)
       .then(function(user) {
-        return res.sendStatus(201);
+        res.sendStatus(201);
       })
-      .catch(orm.Sequelize.UniqueConstraintError, function(err) {
-        return res.sendStatus(400);
+      .catch(dbContext.Sequelize.UniqueConstraintError, function(err) {
+        res.sendStatus(400);
       });
   }
 };

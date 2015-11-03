@@ -17,6 +17,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(routes);
+app.disable('etag');
 
 app.use(function(err, req, res, next) {
   if (err.isBoom) {

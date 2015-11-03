@@ -13,16 +13,16 @@ describe("foo", function() {
       .expect(400, done);
   });
 
-  //it("should return 201", function(done) {
-    //request
-      //.post("/users")
-      //.set("Content-Type", "application/json")
-      //.send({
-        //username: "username",
-        //email: "username@domain.com",
-        //password: "password123"
-      //})
-      //.expect(201, done);
-  //});
+  it("should return 201", function(done) {
+    request
+      .post("/users")
+      .set("Content-Type", "application/json")
+      .send({
+        username: "username",
+        email: "username@domain.com",
+        password: "password123"
+      })
+      .expect(201, done);
+  });
 
 });

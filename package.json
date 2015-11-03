@@ -10,7 +10,7 @@
     "mysql": "^2.9.0",
     "pretty-error": "^1.2.0",
     "sequelize": "^3.11.0",
-    "sequelize-context": "0.0.4"
+    "sequelize-context": "0.0.5"
   },
   "devDependencies": {
     "chai": "^3.3.0",
