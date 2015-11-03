@@ -33,4 +33,31 @@ describe("foo", function() {
       .expect(201, done);
   });
 
+  it("should store user in db", function(done) {
+    const user = {
+      username: "username",
+      email: "username@domain.com",
+      password: "password123"
+    };
+    request
+      .post("/users")
+      .set("Content-Type", "application/json")
+      .send(user)
+      .end(function(err, res) {
+        expect(err).to.not.exist;
+        dbContext
+          .models
+          .User
+          .findOne({
+            where: {
+              username: user.username
+            }
+          })
+          .then(function(user) {
+            expect(user).to.exist;
+            done();
+          });
+      });
+  });
+
 });
