@@ -9,7 +9,7 @@ test("valid body", function(assert) {
     password: "p@55w0rd",
     email: "user@domain.com"
   };
-  
+
   assert.plan(1);
 
   const req = httpMocks.createRequest({
