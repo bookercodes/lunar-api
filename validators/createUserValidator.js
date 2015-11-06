@@ -85,7 +85,9 @@ export default {
       .then(function(errors) {
         errors = extractErrors(errors);
         if (errors.length > 0) {
-          return res.status(400).json(errors);
+          return res.status(400).json({
+            errors: errors
+          });
         }
         next();
       });
