@@ -1,24 +1,24 @@
-import joi from "joi";
 import _ from "lodash";
-import dbContext from "sequelize-context";
+import joi from "joi";
 import Promise from "bluebird";
+import db from "sequelize-context";
 
-function validateAvailability(property, value) {
+function validateAvailability(field, value) {
   return new Promise(function(resolve) {
-    dbContext
+    db
       .models
       .User
       .findOne({
         where: {
-          [property]: value
+          [field]: value
         }
       })
       .then(function(user) {
-        var errors = [];
+        const errors = [];
         if (user) {
           errors.push({
-            path: property,
-            message: `"${property}" is taken`
+            path: field,
+            message: `"${field}" is taken`
           });
         }
         resolve(errors);
@@ -26,10 +26,13 @@ function validateAvailability(property, value) {
   });
 }
 
-const validateUsernameAvailability = username => validateAvailability(
-  "username", username);
-const validateEmailAvailability = email => validateAvailability("email",
-  email);
+function validateUsernameAvailability(username) {
+  return validateAvailability("username", username);
+}
+
+function validateEmailAvailability(email) {
+  return validateAvailability("email", email);
+}
 
 function validateBody(body) {
   return new Promise(function(resolve) {
@@ -50,35 +53,41 @@ function validateBody(body) {
         .email()
         .required()
     };
-    joi.validate(body, schema, {
+    const options = {
       abortEarly: false
-    }, function(error) {
-      if (error)
-        resolve(error.details);
-      else
-        resolve([]);
+    };
+    joi.validate(body, schema, options, function(error) {
+      if (error) {
+        return resolve(error.details);
+      }
+      resolve([]);
     });
   });
+}
+
+function extractErrors(errors) {
+  return _
+    .uniq(errors, detail => detail.path)
+    .map(detail => detail.message);
 }
 
 export default {
   validateBody: function(req, res, next) {
 
-    var promises = [
+    const promises = [
       validateBody(req.body),
       validateUsernameAvailability(req.body.username),
       validateEmailAvailability(req.body.email)
     ];
 
-    Promise.reduce(promises, (errorsAggregate, errors) => errorsAggregate.concat(
-      errors), []).then(function(errors) {
-      errors = _
-        .uniq(errors, detail => detail.path)
-        .map(detail => detail.message);
-      if (errors.length > 0) {
-        return res.status(400).json(errors);
-      }
-      return next();
-    });
+    Promise
+      .reduce(promises, (errorsAggregate, errors) => errorsAggregate.concat(errors), [])
+      .then(function(errors) {
+        errors = extractErrors(errors);
+        if (errors.length > 0) {
+          return res.status(400).json(errors);
+        }
+        next();
+      });
   }
 };
