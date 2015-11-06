@@ -1,11 +1,11 @@
 import express from 'express';
-import validate from "./validators";
+import createUserValidator from "./validators/createUserValidator";
 
 const router = express.Router();
 
 import users from "./controllers/usersController";
 router
   .route("/users")
-  .post(validate.joinBody, users.create);
+  .post(createUserValidator.validateBody, users.create);
 
 export default router;

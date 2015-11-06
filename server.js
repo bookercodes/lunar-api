@@ -5,6 +5,7 @@ import config from "config";
 import dbContext from "sequelize-context";
 import prettyError from "pretty-error";
 import process from "process";
+import errorHandler from "errorhandler";
 
 prettyError.start();
 
@@ -17,6 +18,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(routes);
+app.use(errorHandler());
 app.disable('etag');
 
 app.use(function(err, req, res, next) {

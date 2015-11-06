@@ -3,6 +3,17 @@ import httpMocks from "node-mocks-http";
 import sinon from "sinon";
 import sut from "../../validators/createUserValidator";
 
+// valid body
+// invalid username
+// invalid password
+// invalid email
+// duplicate username
+// disallowed field
+// more than one error is returned if more than one error occured
+// only one error per field is returned at a time, even if there are more than
+// one
+// error contains "username", "password", etc
+
 test("valid body", function(assert) {
   const validBody = {
     username: "user",
@@ -26,3 +37,4 @@ test("valid body", function(assert) {
 
   assert.ok(next.calledOnce);
 });
+
