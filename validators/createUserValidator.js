@@ -2,36 +2,14 @@ import _ from "lodash";
 import joi from "joi";
 import Promise from "bluebird";
 import db from "sequelize-context";
-
-function validateAvailability(field, value) {
-  return new Promise(function(resolve) {
-    db
-      .models
-      .User
-      .findOne({
-        where: {
-          [field]: value
-        }
-      })
-      .then(function(user) {
-        const errors = [];
-        if (user) {
-          errors.push({
-            path: field,
-            message: `"${field}" is taken`
-          });
-        }
-        resolve(errors);
-      });
-  });
-}
+import { extractErrors } from "../lib/util.js";
 
 function validateUsernameAvailability(username) {
-  return validateAvailability("username", username);
+  return db.models.User.validateAvailability("username", username);
 }
 
 function validateEmailAvailability(email) {
-  return validateAvailability("email", email);
+  return db.models.User.validateAvailability("email", email);
 }
 
 function validateBody(body) {
@@ -63,12 +41,6 @@ function validateBody(body) {
       resolve([]);
     });
   });
-}
-
-function extractErrors(errors) {
-  return _
-    .uniq(errors, detail => detail.path)
-    .map(detail => detail.message);
 }
 
 export default {

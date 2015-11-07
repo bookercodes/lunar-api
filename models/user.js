@@ -43,6 +43,28 @@ module.exports = function(sequelize, DataTypes) {
       afterValidate: function(user) {
         user.password = bcrypt.hashSync(user.password, 8);
       }
+    },
+    classMethods: {
+      validateAvailability: function(field, value) {
+        return new Promise(function(resolve) {
+          User
+            .findOne({
+              where: {
+                [field]: value
+              }
+            })
+          .then(function(user) {
+            const errors = [];
+            if (user) {
+              errors.push({
+                path: field,
+                message: `"${field}" is taken`
+              });
+            }
+            resolve(errors);
+          });
+        });
+      }
     }
   });
   return User;
