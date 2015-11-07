@@ -53,16 +53,16 @@ module.exports = function(sequelize, DataTypes) {
                 [field]: value
               }
             })
-          .then(function(user) {
-            const errors = [];
-            if (user) {
-              errors.push({
-                path: field,
-                message: `"${field}" is taken`
-              });
-            }
-            resolve(errors);
-          });
+            .then(function(user) {
+              const errors = [];
+              if (user) {
+                errors.push({
+                  path: field,
+                  message: `"${field}" is taken`
+                });
+              }
+              resolve(errors);
+            });
         });
       }
     }
