@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "babel": "^5.8.29",
-    "babel-core": "^5.8.33",
     "bcryptjs": "^2.3.0",
     "bluebird": "^3.0.5",
     "body-parser": "^1.14.1",
@@ -17,6 +15,7 @@
   },
   "devDependencies": {
     "ava": "^0.4.2",
+    "babel-core": "^5.8.33",
     "node-mocks-http": "^1.5.0",
     "sinon": "^1.17.2",
     "sqlite3": "^3.1.0"
