@@ -1,6 +1,6 @@
 "use strict";
 
-import bcrypt from "bcryptjs";
+const bcrypt = require("bcryptjs");
 
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define("User", {
@@ -58,7 +58,7 @@ module.exports = function(sequelize, DataTypes) {
               if (user) {
                 errors.push({
                   path: field,
-                  message: `"${field}" is taken`
+                  message: "\"" + field + "\" is taken"
                 });
               }
               resolve(errors);
