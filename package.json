@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "babel-core": "^5.8.33",
     "bcryptjs": "^2.3.0",
     "bluebird": "^3.0.5",
     "body-parser": "^1.14.1",
@@ -14,14 +15,14 @@
     "sequelize-context": "0.0.5"
   },
   "devDependencies": {
-    "ava": "^0.4.2",
-    "babel-core": "^5.8.33",
+    "chai": "^3.4.1",
+    "mocha": "^2.3.3",
     "node-mocks-http": "^1.5.0",
     "sinon": "^1.17.2",
     "sqlite3": "^3.1.0"
   },
   "scripts": {
     "start": "nodemon index.js",
-    "test": "NODE_ENV=test ava test/**/*.js"
+    "test": "NODE_ENV=test mocha ./test --recursive -w --compilers js:babel-core/register"
   }
 }
