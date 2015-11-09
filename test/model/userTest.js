@@ -6,17 +6,7 @@ import config from "config";
 chai.use(chaiStr);
 const expect = chai.expect;
 
-before(function() {
-  db.connect(config.database, config.username, config.password, {
-    logging: false,
-    dialect: config.dialect
-  });
-  return db
-    .connection
-    .sync({
-      force: true
-    });
-});
+before(function() {});
 
 describe("create with valid model", function(done) {
 
@@ -28,13 +18,24 @@ describe("create with valid model", function(done) {
     password: "password"
   };
 
-  before(function() {
-    return db
-      .models
-      .User
-      .create(user)
-      .then(function(result) {
-        createResult = result;
+  before(function(done) {
+    db.connect(config.database, config.username, config.password, {
+      logging: false,
+      dialect: config.dialect
+    });
+    db
+      .connection
+      .sync({
+        force: true
+      }).then(function() {
+        db
+          .models
+          .User
+          .create(user)
+          .then(function(result) {
+            createResult = result;
+            done();
+          });
       });
   });
 
