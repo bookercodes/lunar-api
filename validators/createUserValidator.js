@@ -2,10 +2,7 @@ import _ from "lodash";
 import joi from "joi";
 import Promise from "bluebird";
 import db from "sequelize-context";
-import {
-  extractErrors
-}
-from "../lib/util.js";
+import util from "../lib/util.js";
 
 const createUserValidator = {};
 
@@ -60,7 +57,7 @@ createUserValidator.validateBody = function(req, res, next) {
     .reduce(tasks, (errorsAggregate, errors) => errorsAggregate.concat(
       errors), [])
     .then(function(errors) {
-      errors = extractErrors(errors);
+      errors = util.extractErrors(errors);
       if (errors.length > 0) {
         return res.status(400).json({
           errors: errors

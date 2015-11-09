@@ -1,7 +1,7 @@
 import util from "../../lib/util.js";
 import chai from "chai";
 
-const assert = chai.assert;
+const expect = chai.expect;
 
 describe("extractErrors", function() {
   it("should return error message only and not the path",
@@ -12,9 +12,10 @@ describe("extractErrors", function() {
       }];
       const actual = util.extractErrors(input);
       const expected = [input[0].message];
-      assert(actual, expected);
-      assert.notOk(actual[0].path);
+      expect(actual).to.eql(expected);
+      expect(actual[0].path).to.not.be.ok;
     });
+
   it("should return one error message per path", function() {
     const input = [{
       message: "\"email\" cannot be empty",
@@ -25,7 +26,7 @@ describe("extractErrors", function() {
     }];
     const expected = [input[0].message];
     const actual = util.extractErrors(input);
-    assert(actual, expected);
+    expect(actual).to.eql(expected);
   });
 
   it("can return more than one error", function() {
@@ -39,6 +40,6 @@ describe("extractErrors", function() {
 
     const expected = [input[0].message, input[1].message];
     const actual = util.extractErrors(input);
-    assert(actual, expected);
+    expect(actual).to.eql(expected);
   });
 });
