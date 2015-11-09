@@ -1,8 +1,11 @@
-const _       = require("lodash");
-const joi     = require("joi");
-const Promise = require("bluebird");
-const db      = require("sequelize-context");
-const util    = require("../lib/util.js");
+import _ from "lodash";
+import joi from "joi";
+import Promise from "bluebird";
+import db from "sequelize-context";
+import {
+  extractErrors
+}
+from "../lib/util.js";
 
 const createUserValidator = {};
 
@@ -57,7 +60,7 @@ createUserValidator.validateBody = function(req, res, next) {
     .reduce(tasks, (errorsAggregate, errors) => errorsAggregate.concat(
       errors), [])
     .then(function(errors) {
-      errors = util.extractErrors(errors);
+      errors = extractErrors(errors);
       if (errors.length > 0) {
         return res.status(400).json({
           errors: errors
@@ -68,4 +71,4 @@ createUserValidator.validateBody = function(req, res, next) {
 
 };
 
-module.exports = createUserValidator;
+export default createUserValidator;
