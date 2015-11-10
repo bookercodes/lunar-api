@@ -8,7 +8,27 @@ import chaiAsPromised from "chai-as-promised";
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
+/**
+ * Composes the system under test's dependency graph before returning it. We
+ * don't want the system under test to interface with the database so we
+ * replace the database module at the seam with a mock, using mockery.
+ * @param  {Function} validateAvailabilityStub The function to use instead of
+ * calling the database.
+ */
+function importSut(validateAvailabilityStub) {
+  const contextMock = {
+    models: {
+      User: {
+        validateAvailability: validateAvailabilityStub
+      }
+    }
+  };
+  mockery.registerMock("sequelize-context", contextMock);
+  return require("../../validators/createUserValidator");
+}
+
 describe("createUserValidator", function() {
+
   beforeEach(function() {
     mockery.enable({
       warnOnReplace: false,
@@ -17,20 +37,16 @@ describe("createUserValidator", function() {
     });
   });
 
+  afterEach(function() {
+    mockery.disable();
+  });
+
   describe("with valid body, validateBody func", function() {
     it("should return no errors", function() {
-      const contextMock = {
-        models: {
-          User: {
-            validateAvailability: function() {
-              return new Promise(resolve => resolve([]));
-            }
-          }
-        }
+      const validateAvailabilityStub = function() {
+        return new Promise(resolve => resolve([]));
       };
-      mockery.registerMock("sequelize-context", contextMock);
-      const createUserValidator = require(
-        "../../validators/createUserValidator");
+      const sut = importSut(validateAvailabilityStub);
       const req = httpMocks.createRequest({
         body: {
           username: "username",
@@ -39,7 +55,7 @@ describe("createUserValidator", function() {
         }
       });
       const res = {};
-      return expect(createUserValidator.validateBody(req, res))
+      return expect(sut.validateBody(req, res))
         .to
         .eventually
         .have
@@ -57,18 +73,10 @@ describe("createUserValidator", function() {
         42,
         new Array(31 + 1).join("x")
       ];
-      const contextMock = {
-        models: {
-          User: {
-            validateAvailability: function() {
-              return new Promise(resolve => resolve([]));
-            }
-          }
-        }
+      const validateAvailabilityStub = function() {
+        return new Promise(resolve => resolve([]));
       };
-      mockery.registerMock("sequelize-context", contextMock);
-      const createUserValidator = require(
-        "../../validators/createUserValidator");
+      const sut = importSut(validateAvailabilityStub);
       invalidUsernames.forEach(function(invalidUsername) {
         const req = httpMocks.createRequest({
           body: {
@@ -78,7 +86,7 @@ describe("createUserValidator", function() {
           }
         });
         const res = {};
-        return expect(createUserValidator.validateBody(req, res))
+        return expect(sut.validateBody(req, res))
           .to
           .eventually
           .have
@@ -95,18 +103,10 @@ describe("createUserValidator", function() {
         42,
         new Array(101 + 1).join("x")
       ];
-      const contextMock = {
-        models: {
-          User: {
-            validateAvailability: function() {
-              return new Promise(resolve => resolve([]));
-            }
-          }
-        }
+      const validateAvailabilityStub = function() {
+        return new Promise(resolve => resolve([]));
       };
-      mockery.registerMock("sequelize-context", contextMock);
-      const createUserValidator = require(
-        "../../validators/createUserValidator");
+      const sut = importSut(validateAvailabilityStub);
       invalidPasswords.forEach(function(invalidPassword) {
         const req = httpMocks.createRequest({
           body: {
@@ -116,7 +116,7 @@ describe("createUserValidator", function() {
           }
         });
         const res = {};
-        return expect(createUserValidator.validateBody(req, res))
+        return expect(sut.validateBody(req, res))
           .to
           .eventually
           .have
@@ -132,18 +132,10 @@ describe("createUserValidator", function() {
         "email",
         42
       ];
-      const contextMock = {
-        models: {
-          User: {
-            validateAvailability: function() {
-              return new Promise(resolve => resolve([]));
-            }
-          }
-        }
+      const validateAvailabilityStub = function() {
+        return new Promise(resolve => resolve([]));
       };
-      mockery.registerMock("sequelize-context", contextMock);
-      const createUserValidator = require(
-        "../../validators/createUserValidator");
+      const sut = importSut(validateAvailabilityStub);
       invalidEmails.forEach(function(invalidEmail) {
         const req = httpMocks.createRequest({
           body: {
@@ -153,7 +145,7 @@ describe("createUserValidator", function() {
           }
         });
         const res = {};
-        return expect(createUserValidator.validateBody(req, res))
+        return expect(sut.validateBody(req, res))
           .to
           .eventually
           .have
@@ -164,18 +156,10 @@ describe("createUserValidator", function() {
 
   describe("with unrecognized field, validateBody func", function() {
     it("should return an error", function() {
-      const contextMock = {
-        models: {
-          User: {
-            validateAvailability: function() {
-              return new Promise(resolve => resolve([]));
-            }
-          }
-        }
+      const validateAvailabilityStub = function() {
+        return new Promise(resolve => resolve([]));
       };
-      mockery.registerMock("sequelize-context", contextMock);
-      const createUserValidator = require(
-        "../../validators/createUserValidator");
+      const sut = importSut(validateAvailabilityStub);
       const req = httpMocks.createRequest({
         body: {
           username: "username",
@@ -185,7 +169,7 @@ describe("createUserValidator", function() {
         }
       });
       const res = {};
-      return expect(createUserValidator.validateBody(req, res))
+      return expect(sut.validateBody(req, res))
         .to
         .eventually
         .have
@@ -195,18 +179,10 @@ describe("createUserValidator", function() {
 
   describe("duplicate email", function() {
     it("should return an error", function() {
-      const contextMock = {
-        models: {
-          User: {
-            validateAvailability: function() {
-              return new Promise(resolve => resolve(["\"username\" is taken"]));
-            }
-          }
-        }
+      const validateAvailabilityStub = function() {
+        return new Promise(resolve => resolve(["\"username\" is taken"]));
       };
-      mockery.registerMock("sequelize-context", contextMock);
-      const createUserValidator = require(
-        "../../validators/createUserValidator");
+      const sut = importSut(validateAvailabilityStub);
       const req = httpMocks.createRequest({
         body: {
           username: "username",
@@ -215,7 +191,7 @@ describe("createUserValidator", function() {
         }
       });
       const res = {};
-      return expect(createUserValidator.validateBody(req, res))
+      return expect(sut.validateBody(req, res))
         .to
         .eventually
         .have
@@ -225,18 +201,10 @@ describe("createUserValidator", function() {
 
   describe("can return more than one error", function() {
     it("should return an error", function() {
-      const contextMock = {
-        models: {
-          User: {
-            validateAvailability: function() {
-              return new Promise(resolve => resolve(["\"username\" is taken"]));
-            }
-          }
-        }
+      const validateAvailabilityStub = function() {
+        return new Promise(resolve => resolve(["\"username\" is taken"]));
       };
-      mockery.registerMock("sequelize-context", contextMock);
-      const createUserValidator = require(
-        "../../validators/createUserValidator");
+      const sut = importSut(validateAvailabilityStub);
       const req = httpMocks.createRequest({
         body: {
           username: "",
@@ -245,49 +213,11 @@ describe("createUserValidator", function() {
         }
       });
       const res = {};
-      return expect(createUserValidator.validateBody(req, res))
+      return expect(sut.validateBody(req, res))
         .to
         .eventually
         .have
         .length(4);
     });
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  afterEach(function() {
-    mockery.disable();
   });
 });
