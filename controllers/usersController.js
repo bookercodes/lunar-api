@@ -2,13 +2,13 @@ import dbContext from "sequelize-context";
 
 export default {
   create(req, res) {
-    
+
     const model = {
       username: req.body.username,
       password: req.body.password,
       email: req.body.email
     };
-     
+
     dbContext
       .models
       .User

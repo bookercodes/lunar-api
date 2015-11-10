@@ -10,7 +10,7 @@ router
     createUserValidator
       .validateBody(req, res)
       .then(function(errors) {
-        if (errors) {
+        if (errors.length > 1) {
           res.status(400).json(errors);
         } else {
           next();
