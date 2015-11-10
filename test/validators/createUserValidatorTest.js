@@ -9,19 +9,17 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 describe("createUserValidator", function() {
-  describe("with valid body validateBody", function() {
-
-    before(function() {
-      mockery.enable({
-        warnOnReplace: false,
-        warnOnUnregistered: false,
-        useCleanCache: true
-      });
+  beforeEach(function() {
+    mockery.enable({
+      warnOnReplace: false,
+      warnOnUnregistered: false,
+      useCleanCache: true
     });
+  });
 
+  describe("with valid body, validateBody func", function() {
     it("should return no errors", function() {
-      let createUserValidator;
-      const dbMock = {
+      const contextMock = {
         models: {
           User: {
             validateAvailability: function() {
@@ -30,8 +28,8 @@ describe("createUserValidator", function() {
           }
         }
       };
-      mockery.registerMock("sequelize-context", dbMock);
-      createUserValidator = require(
+      mockery.registerMock("sequelize-context", contextMock);
+      const createUserValidator = require(
         "../../validators/createUserValidator");
       const req = httpMocks.createRequest({
         body: {
@@ -40,14 +38,17 @@ describe("createUserValidator", function() {
           email: "username@domain.com"
         }
       });
-      const res = {};
-      return expect(createUserValidator.validateBody(req, res)).to.eventually
-        .have.length(0);
+      const res = { };
+      return expect(createUserValidator.validateBody(req, res))
+        .to
+        .eventually
+        .have
+        .length(0);
     });
 
-    after(function() {
-      mockery.disable();
-    });
 
+  });
+  afterEach(function() {
+    mockery.disable();
   });
 });
