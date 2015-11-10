@@ -1,7 +1,7 @@
-import chai from "chai";
-import chaiStr from 'chai-string';
-import db from 'sequelize-context';
-import config from "config";
+import chai    from "chai";
+import chaiStr from "chai-string";
+import db      from "sequelize-context";
+import config  from "config";
 
 chai.use(chaiStr);
 const expect = chai.expect;
@@ -40,7 +40,11 @@ describe("user model", function() {
             .User
             .validateAvailability("username", user.username);
         });
-      return expect(promise).to.eventually.have.length(1);
+      return expect(promise)
+        .to
+        .eventually
+        .have
+        .length(1);
     });
   });
 
@@ -51,7 +55,11 @@ describe("user model", function() {
           .models
           .User
           .validateAvailability("username", "foo");
-        return expect(promise).to.eventually.have.length(0);
+        return expect(promise)
+          .to
+          .eventually
+          .have
+          .length(0);
       });
     });
 
@@ -76,17 +84,22 @@ describe("user model", function() {
     });
 
     it("should return userId", function() {
-      expect(createResult.dataValues.userId).to.exist;
+      expect(createResult.dataValues.userId)
+        .to
+        .exist;
     });
 
     it("should not store the password in plain text", function() {
-      expect(createResult.dataValues.password).to.not.equal(
-        user.password);
+      expect(createResult.dataValues.password)
+        .to
+        .not
+        .equal(user.password);
     });
 
     it("should hash the password using bcrypt", function() {
-      expect(createResult.dataValues.password).to.startsWith(
-        '$2a$');
+      expect(createResult.dataValues.password)
+        .to
+        .startWith("$2a$");
     });
   });
 });
