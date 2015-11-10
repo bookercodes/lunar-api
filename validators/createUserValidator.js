@@ -47,24 +47,21 @@ function validateBody(body) {
 
 createUserValidator.validateBody = function(req, res, next) {
 
-  const tasks = [
+  const promises = [
     validateBody(req.body),
     validateUsernameAvailability(req.body.username),
     validateEmailAvailability(req.body.email)
   ];
 
-  Promise
-    .reduce(tasks, (errorsAggregate, errors) => errorsAggregate.concat(
-      errors), [])
-    .then(function(errors) {
-      errors = util.extractErrors(errors);
-      if (errors.length > 0) {
-        return res.status(400).json({
-          errors: errors
-        });
-      }
-      next();
-    });
+  return new Promise(function(resolve) {
+    Promise
+      .reduce(promises, (errorsAggregate, errors) => errorsAggregate.concat(
+        errors), [])
+      .then(function(errors) {
+        errors = util.extractErrors(errors);
+        resolve(errors);
+      });
+  });
 
 };
 
