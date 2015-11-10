@@ -10,12 +10,12 @@ const expect = chai.expect;
 
 /**
  * Composes the system under test's dependency graph before returning it. We
- * don't want the system under test to interface with the database so we
- * replace the database module at the seam with a mock, using mockery.
+ * don't want the system under test to interface with the db, so we replace the
+ * db module dependency at its seam with a mock, using mockery.
  * @param  {Function} validateAvailabilityStub The function to use instead of
  * calling the database.
  */
-function importSut(validateAvailabilityStub) {
+function requireSut(validateAvailabilityStub) {
   const contextMock = {
     models: {
       User: {
@@ -46,7 +46,7 @@ describe("createUserValidator", function() {
       const validateAvailabilityStub = function() {
         return new Promise(resolve => resolve([]));
       };
-      const sut = importSut(validateAvailabilityStub);
+      const sut = requireSut(validateAvailabilityStub);
       const req = httpMocks.createRequest({
         body: {
           username: "username",
@@ -76,7 +76,7 @@ describe("createUserValidator", function() {
       const validateAvailabilityStub = function() {
         return new Promise(resolve => resolve([]));
       };
-      const sut = importSut(validateAvailabilityStub);
+      const sut = requireSut(validateAvailabilityStub);
       invalidUsernames.forEach(function(invalidUsername) {
         const req = httpMocks.createRequest({
           body: {
@@ -106,7 +106,7 @@ describe("createUserValidator", function() {
       const validateAvailabilityStub = function() {
         return new Promise(resolve => resolve([]));
       };
-      const sut = importSut(validateAvailabilityStub);
+      const sut = requireSut(validateAvailabilityStub);
       invalidPasswords.forEach(function(invalidPassword) {
         const req = httpMocks.createRequest({
           body: {
@@ -135,7 +135,7 @@ describe("createUserValidator", function() {
       const validateAvailabilityStub = function() {
         return new Promise(resolve => resolve([]));
       };
-      const sut = importSut(validateAvailabilityStub);
+      const sut = requireSut(validateAvailabilityStub);
       invalidEmails.forEach(function(invalidEmail) {
         const req = httpMocks.createRequest({
           body: {
@@ -159,7 +159,7 @@ describe("createUserValidator", function() {
       const validateAvailabilityStub = function() {
         return new Promise(resolve => resolve([]));
       };
-      const sut = importSut(validateAvailabilityStub);
+      const sut = requireSut(validateAvailabilityStub);
       const req = httpMocks.createRequest({
         body: {
           username: "username",
@@ -182,7 +182,7 @@ describe("createUserValidator", function() {
       const validateAvailabilityStub = function() {
         return new Promise(resolve => resolve(["\"username\" is taken"]));
       };
-      const sut = importSut(validateAvailabilityStub);
+      const sut = requireSut(validateAvailabilityStub);
       const req = httpMocks.createRequest({
         body: {
           username: "username",
@@ -204,7 +204,7 @@ describe("createUserValidator", function() {
       const validateAvailabilityStub = function() {
         return new Promise(resolve => resolve(["\"username\" is taken"]));
       };
-      const sut = importSut(validateAvailabilityStub);
+      const sut = requireSut(validateAvailabilityStub);
       const req = httpMocks.createRequest({
         body: {
           username: "",

@@ -22,7 +22,9 @@
     "mockery": "^1.4.0",
     "node-mocks-http": "^1.5.0",
     "sinon": "^1.17.2",
-    "sqlite3": "^3.1.0"
+    "sqlite3": "^3.1.0",
+    "supertest": "^1.1.0",
+    "supertest-as-promised": "^2.0.2"
   },
   "scripts": {
     "start": "nodemon index.js",
