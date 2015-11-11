@@ -24,7 +24,7 @@ function requireSut(validateAvailabilityStub) {
     }
   };
   mockery.registerMock("sequelize-context", contextMock);
-  return require("../../validators/createUserValidator");
+  return require("../../../validators/createUserValidator.js");
 }
 
 describe("createUserValidator", function() {
