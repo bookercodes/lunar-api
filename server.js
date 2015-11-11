@@ -7,8 +7,6 @@ import prettyError from "pretty-error";
 import process from "process";
 import errorHandler from "errorhandler";
 
-prettyError.start();
-
 dbContext.connect(config.database, config.username, config.password, {
   logging: false,
   dialect: config.dialect
