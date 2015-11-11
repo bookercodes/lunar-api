@@ -8,13 +8,6 @@ import chaiAsPromised from "chai-as-promised";
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-/**
- * Composes the system under test's dependency graph before returning it. We
- * don't want the system under test to interface with the db, so we replace the
- * db module dependency at its seam with a mock, using mockery.
- * @param  {Function} validateAvailabilityStub The function to use instead of
- * calling the database.
- */
 function requireSut(validateAvailabilityStub) {
   const contextMock = {
     models: {
@@ -27,9 +20,9 @@ function requireSut(validateAvailabilityStub) {
   return require("../../../validators/createUserValidator.js");
 }
 
-describe("createUserValidator", function() {
+suite("createUserValidator", function() {
 
-  beforeEach(function() {
+  setup(function() {
     mockery.enable({
       warnOnReplace: false,
       warnOnUnregistered: false,
@@ -37,12 +30,21 @@ describe("createUserValidator", function() {
     });
   });
 
-  afterEach(function() {
+  teardown(function() {
     mockery.disable();
   });
 
-  describe("with valid body, validateBody func", function() {
-    it("should return no errors", function() {
+  test("exports module", function() {
+    const sut = require("../../../validators/createUserValidator.js");
+    expect(sut)
+      .to
+      .not
+      .be
+      .empty;
+  });
+
+  test("validateBody() returns an empty error array when input is valid",
+    function() {
       const validateAvailabilityStub = function() {
         return new Promise(resolve => resolve([]));
       };
@@ -61,10 +63,10 @@ describe("createUserValidator", function() {
         .have
         .length(0);
     });
-  });
 
-  describe("with invalid username, validateBody func", function() {
-    it("should return an error", function() {
+  test(
+    "validateBody() returns populated errors array when username is invalid",
+    function() {
       const invalidUsernames = [
         "",
         "a",
@@ -93,10 +95,10 @@ describe("createUserValidator", function() {
           .length(1);
       });
     });
-  });
 
-  describe("with invalid password, validateBody func", function() {
-    it("should return an error", function() {
+  test(
+    "validateBody() returns populated errors array when password is invalid",
+    function() {
       const invalidPasswords = [
         "",
         "passw",
@@ -123,10 +125,10 @@ describe("createUserValidator", function() {
           .length(1);
       });
     });
-  });
 
-  describe("with invalid email, validateBody func", function() {
-    it("should return an error", function() {
+  test(
+    "validateBody() returns populated errors array when email is invalid",
+    function() {
       const invalidEmails = [
         "",
         "email",
@@ -152,10 +154,10 @@ describe("createUserValidator", function() {
           .length(1);
       });
     });
-  });
 
-  describe("with unrecognized field, validateBody func", function() {
-    it("should return an error", function() {
+  test(
+    "validateBody() returns populated errors array when unknown field is present",
+    function() {
       const validateAvailabilityStub = function() {
         return new Promise(resolve => resolve([]));
       };
@@ -175,12 +177,14 @@ describe("createUserValidator", function() {
         .have
         .length(1);
     });
-  });
 
-  describe("duplicate email", function() {
-    it("should return an error", function() {
+  test(
+    "validateBody() returns populated errors array when username is taken",
+    function() {
       const validateAvailabilityStub = function() {
-        return new Promise(resolve => resolve(["\"username\" is taken"]));
+        return new Promise(resolve => resolve([
+          "\"username\" is taken"
+        ]));
       };
       const sut = requireSut(validateAvailabilityStub);
       const req = httpMocks.createRequest({
@@ -197,27 +201,26 @@ describe("createUserValidator", function() {
         .have
         .length(1);
     });
-  });
 
-  describe("can return more than one error", function() {
-    it("should return an error", function() {
-      const validateAvailabilityStub = function() {
-        return new Promise(resolve => resolve(["\"username\" is taken"]));
-      };
-      const sut = requireSut(validateAvailabilityStub);
-      const req = httpMocks.createRequest({
-        body: {
-          username: "",
-          password: "",
-          email: "",
-        }
-      });
-      const res = {};
-      return expect(sut.validateBody(req, res))
-        .to
-        .eventually
-        .have
-        .length(4);
+  test("validateAvailability() can return many errors", function() {
+    const validateAvailabilityStub = function() {
+      return new Promise(resolve => resolve([
+        "\"username\" is taken"
+      ]));
+    };
+    const sut = requireSut(validateAvailabilityStub);
+    const req = httpMocks.createRequest({
+      body: {
+        username: "",
+        password: "",
+        email: "",
+      }
     });
+    const res = {};
+    return expect(sut.validateBody(req, res))
+      .to
+      .eventually
+      .have
+      .length(4);
   });
 });
