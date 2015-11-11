@@ -29,6 +29,6 @@
   },
   "scripts": {
     "start": "nodemon index.js",
-    "test": "NODE_ENV=test mocha ./test --recursive -w --compilers js:babel-core/register --ui tdd"
+    "test": "NODE_ENV=test mocha ./test --reporter nyan --recursive -w --compilers js:babel-core/register --ui tdd"
   }
 }
