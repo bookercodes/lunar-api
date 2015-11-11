@@ -1,9 +1,9 @@
-import util from "../../../lib/util";
+import sut from "../../../lib/sut";
 import chai from "chai";
 
 const assert = chai.assert;
 
-suite("util", function() {
+suite("sut", function() {
 
   test("extractErrors() returns array", function() {
     const input = [{
@@ -11,7 +11,7 @@ suite("util", function() {
       path: "username"
     }];
 
-    const actual = util.extractErrors(input);
+    const actual = sut.extractErrors(input);
 
     assert.isArray(actual);
   });
@@ -23,7 +23,7 @@ suite("util", function() {
       path: "username"
     }];
 
-    const actual = util.extractErrors(input);
+    const actual = sut.extractErrors(input);
 
     const expected = [message];
     assert.deepEqual(actual, expected);
@@ -40,7 +40,7 @@ suite("util", function() {
       path: "email"
     }];
 
-    const actual = util.extractErrors(input);
+    const actual = sut.extractErrors(input);
 
     const expected = [message];
     assert.deepEqual(actual, expected);
@@ -57,7 +57,7 @@ suite("util", function() {
       path: "username"
     }];
 
-    const actual = util.extractErrors(input);
+    const actual = sut.extractErrors(input);
 
     const expected = [message1, message2];
     assert.deepEqual(actual, expected);
