@@ -58,6 +58,26 @@ suite("util", function() {
         .eql(expected);
     });
 
+  test("extractErrors() returns message and path properties only",
+    function() {
+      const input = [{
+        message: "\"username\" cannot be empty",
+        path: "username",
+        foo: "bar"
+      }];
+
+      const actual = sut.extractErrors(input);
+
+      const expected = [{
+        path: "username",
+        message: "\"username\" cannot be empty"
+      }];
+
+      expect(actual)
+        .to
+        .eql(expected);
+    });
+
   test("extractErrors() returns one error per path", function() {
     const input = [{
       message: "\"username\" cannot be empty",
