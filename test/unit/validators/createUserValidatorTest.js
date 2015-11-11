@@ -65,191 +65,196 @@ suite("createUserValidator", function() {
         .length(0);
     });
 
-  mochaUtils.withData([
-    "",
-    "a",
-    "username$",
-    "user name",
-    42,
-    new Array(31 + 1).join("x")
-  ], function(invalidUsername) {
-    test("validateBody() with invalid username should return an error",
-      function() {
-        const validateAvailabilityStub = function() {
-          return new Promise(resolve => resolve([]));
-        };
-        const sut = requireSut(validateAvailabilityStub);
-        const req = httpMocks.createRequest({
-          body: {
-            username: invalidUsername,
-            password: "some password",
-            email: "username@domain.com"
-          }
-        });
-        const res = {};
-        sut.validateBody(req, res).then(function(errors) {
-          expect(errors)
-            .to
-            .have
-            .length(1,
-              `expected input "${invalidUsername}" to cause an error, but it didn't.`
-            );
-          expect(errors[0].message)
-            .to
-            .have
-            .contain("username");
-          expect(errors[0].path)
-            .to
-            .equal("username");
-        });
-      });
-  });
-
-
-  mochaUtils.withData([
-    "",
-    "passw",
-    42,
-    new Array(101 + 1).join("x")
-  ], function(invalidPassword) {
-    test("validateBody() with invalid password should return an error",
-      function() {
-        const validateAvailabilityStub = function() {
-          return new Promise(resolve => resolve([]));
-        };
-        const sut = requireSut(validateAvailabilityStub);
-        const req = httpMocks.createRequest({
-          body: {
-            username: "username",
-            password: invalidPassword,
-            email: "username@domain.com"
-          }
-        });
-        const res = {};
-        sut.validateBody(req, res).then(function(errors) {
-          expect(errors)
-            .to
-            .have
-            .length(1,
-              `expected input "${invalidPassword}" to cause an error, but it didn't.`
-            );
-          expect(errors[0].message)
-            .to
-            .have
-            .contain("password");
-          expect(errors[0].path)
-            .to
-            .equal("password");
-        });
-      });
-  });
-
-
-  mochaUtils.withData([
-    "",
-    "email",
-    42
-  ], function(invalidEmail) {
-    test("validateBody() with invalid email should return an error",
-      function() {
-        const validateAvailabilityStub = function() {
-          return new Promise(resolve => resolve([]));
-        };
-        const sut = requireSut(validateAvailabilityStub);
-        const req = httpMocks.createRequest({
-          body: {
-            username: "username",
-            password: "some password",
-            email: invalidEmail
-          }
-        });
-        const res = {};
-        sut.validateBody(req, res).then(function(errors) {
-          expect(errors)
-            .to
-            .have
-            .length(1,
-              `expected input "${invalidEmail}" to cause an error, but it didn't.`
-            );
-          expect(errors[0].message)
-            .to
-            .have
-            .contain("email");
-          expect(errors[0].path)
-            .to
-            .equal("email");
-        });
-      });
-  });
-
-
-
-  test(
-    "validateBody() returns populated errors array when unknown field is present",
-    function() {
+  const invalidUsernames = {
+    "empty username": "",
+    "username shorter than 3 chars": "a",
+    "username with symbols": "username$",
+    "username with spaces": "user name",
+    "username that isn't a string": 42,
+    "username longer than 30 chars": new Array(31 + 1).join("x")
+  };
+  for (const key in invalidUsernames) {
+    test(`validateBody() with ${key} should return an error`, function() {
+      // arrange
+      const invalidUsername = invalidUsernames[key];
       const validateAvailabilityStub = function() {
         return new Promise(resolve => resolve([]));
       };
       const sut = requireSut(validateAvailabilityStub);
       const req = httpMocks.createRequest({
         body: {
-          username: "username",
+          username: invalidUsername,
           password: "some password",
-          email: "foo@bar.com",
-          foo: "fosdfsf"
+          email: "username@domain.com"
         }
       });
       const res = {};
-      return expect(sut.validateBody(req, res))
-        .to
-        .eventually
-        .have
-        .length(1);
-    });
 
-  test(
-    "validateBody() returns populated errors array when username is taken",
-    function() {
-      const validateAvailabilityStub = function() {
-        return new Promise(resolve => resolve([
-          "\"username\" is taken"
-        ]));
-      };
-      const sut = requireSut(validateAvailabilityStub);
-      const req = httpMocks.createRequest({
-        body: {
-          username: "username",
-          password: "some password",
-          email: "foo@bar.com",
-        }
+      // exercise
+      sut.validateBody(req, res).then(function(errors) {
+        // verify
+        expect(errors)
+          .to
+          .have
+          .length(1,
+            `expected input "${invalidUsername}" to cause an error, but it didn't.`
+          );
+        expect(errors[0].message)
+          .to
+          .have
+          .contain("username");
+        expect(errors[0].path)
+          .to
+          .equal("username");
       });
-      const res = {};
-      return expect(sut.validateBody(req, res))
-        .to
-        .eventually
-        .have
-        .length(1);
     });
+  }
 
-  test("validateAvailability() can return many errors", function() {
-    const validateAvailabilityStub = function() {
-      return new Promise(resolve => resolve([
-        "\"username\" is taken"
-      ]));
-    };
-    const sut = requireSut(validateAvailabilityStub);
-    const req = httpMocks.createRequest({
-      body: {
-        username: "",
-        password: "",
-        email: "",
-      }
-    });
-    const res = {};
-    return expect(sut.validateBody(req, res))
-      .to
-      .eventually
-      .have
-      .length(4);
-  });
+
+  //mochaUtils.withData([
+  //"",
+  //"passw",
+  //42,
+  //new Array(101 + 1).join("x")
+  //], function(invalidPassword) {
+  //test("validateBody() with invalid password should return an error",
+  //function() {
+  //const validateAvailabilityStub = function() {
+  //return new Promise(resolve => resolve([]));
+  //};
+  //const sut = requireSut(validateAvailabilityStub);
+  //const req = httpMocks.createRequest({
+  //body: {
+  //username: "username",
+  //password: invalidPassword,
+  //email: "username@domain.com"
+  //}
+  //});
+  //const res = {};
+  //sut.validateBody(req, res).then(function(errors) {
+  //expect(errors)
+  //.to
+  //.have
+  //.length(1,
+  //`expected input "${invalidPassword}" to cause an error, but it didn't.`
+  //);
+  //expect(errors[0].message)
+  //.to
+  //.have
+  //.contain("password");
+  //expect(errors[0].path)
+  //.to
+  //.equal("password");
+  //});
+  //});
+  //});
+
+
+  //mochaUtils.withData([
+  //"",
+  //"email",
+  //42
+  //], function(invalidEmail) {
+  //test("validateBody() with invalid email should return an error",
+  //function() {
+  //const validateAvailabilityStub = function() {
+  //return new Promise(resolve => resolve([]));
+  //};
+  //const sut = requireSut(validateAvailabilityStub);
+  //const req = httpMocks.createRequest({
+  //body: {
+  //username: "username",
+  //password: "some password",
+  //email: invalidEmail
+  //}
+  //});
+  //const res = {};
+  //sut.validateBody(req, res).then(function(errors) {
+  //expect(errors)
+  //.to
+  //.have
+  //.length(1,
+  //`expected input "${invalidEmail}" to cause an error, but it didn't.`
+  //);
+  //expect(errors[0].message)
+  //.to
+  //.have
+  //.contain("email");
+  //expect(errors[0].path)
+  //.to
+  //.equal("email");
+  //});
+  //});
+  //});
+
+
+
+  //test(
+  //"validateBody() returns populated errors array when unknown field is present",
+  //function() {
+  //const validateAvailabilityStub = function() {
+  //return new Promise(resolve => resolve([]));
+  //};
+  //const sut = requireSut(validateAvailabilityStub);
+  //const req = httpMocks.createRequest({
+  //body: {
+  //username: "username",
+  //password: "some password",
+  //email: "foo@bar.com",
+  //foo: "fosdfsf"
+  //}
+  //});
+  //const res = {};
+  //return expect(sut.validateBody(req, res))
+  //.to
+  //.eventually
+  //.have
+  //.length(1);
+  //});
+
+  //test(
+  //"validateBody() returns populated errors array when username is taken",
+  //function() {
+  //const validateAvailabilityStub = function() {
+  //return new Promise(resolve => resolve([
+  //"\"username\" is taken"
+  //]));
+  //};
+  //const sut = requireSut(validateAvailabilityStub);
+  //const req = httpMocks.createRequest({
+  //body: {
+  //username: "username",
+  //password: "some password",
+  //email: "foo@bar.com",
+  //}
+  //});
+  //const res = {};
+  //return expect(sut.validateBody(req, res))
+  //.to
+  //.eventually
+  //.have
+  //.length(1);
+  //});
+
+  //test("validateAvailability() can return many errors", function() {
+  //const validateAvailabilityStub = function() {
+  //return new Promise(resolve => resolve([
+  //"\"username\" is taken"
+  //]));
+  //};
+  //const sut = requireSut(validateAvailabilityStub);
+  //const req = httpMocks.createRequest({
+  //body: {
+  //username: "",
+  //password: "",
+  //email: "",
+  //}
+  //});
+  //const res = {};
+  //return expect(sut.validateBody(req, res))
+  //.to
+  //.eventually
+  //.have
+  //.length(4);
+  //});
 });
