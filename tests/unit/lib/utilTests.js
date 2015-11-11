@@ -1,9 +1,14 @@
-import sut from "../../../lib/sut";
+import sut from "../../../lib/util";
 import chai from "chai";
+import _ from "lodash";
 
 const assert = chai.assert;
 
-suite("sut", function() {
+suite("util", function() {
+
+  test("exports module", function() {
+    assert(!_.isEmpty(sut));
+  });
 
   test("extractErrors() returns array", function() {
     const input = [{
