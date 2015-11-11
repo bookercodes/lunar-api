@@ -1,21 +1,23 @@
-import chai    from "chai";
+import chai from "chai";
 import chaiStr from "chai-string";
-import db      from "sequelize-context";
-import config  from "config";
+import chaiAsPromised from "chai-as-promised";
+import db from "sequelize-context";
+import config from "config";
 
 chai.use(chaiStr);
+chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-describe("user model", function() {
+suite("userModel", function() {
 
-  before(function() {
+  suiteSetup(function() {
     db.connect(config.database, config.username, config.password, {
       logging: false,
       dialect: config.dialect
     });
   });
 
-  beforeEach(function() {
+  setup(function() {
     return db
       .connection
       .sync({
@@ -23,8 +25,9 @@ describe("user model", function() {
       });
   });
 
-  describe("with unavailable field, validateAvailability func", function() {
-    it("should return an error", function() {
+  test(
+    "validateAvailability() with unavailable field should return an error",
+    function() {
       const user = {
         username: "username",
         email: "email@email.com",
@@ -46,60 +49,66 @@ describe("user model", function() {
         .have
         .length(1);
     });
-  });
 
-  describe("with available field, validateAvailability func",
+  test(
+    "validateAvailability() with available field should return empty array",
     function() {
-      it("should return no errors", function() {
-        const promise = db
-          .models
-          .User
-          .validateAvailability("username", "foo");
-        return expect(promise)
-          .to
-          .eventually
-          .have
-          .length(0);
-      });
-    });
-
-  describe("with valid model, create func", function(done) {
-
-    let createResult;
-
-    const user = {
-      username: "username",
-      email: "email@email.com",
-      password: "password"
-    };
-
-    before(function() {
-      return db
+      const promise = db
         .models
         .User
-        .create(user)
-        .then(function(result) {
-          createResult = result;
-        });
+        .validateAvailability("username", "foo");
+      return expect(promise)
+        .to
+        .eventually
+        .have
+        .length(0);
     });
 
-    it("should return userId", function() {
-      expect(createResult.dataValues.userId)
-        .to
-        .exist;
-    });
 
-    it("should not store the password in plain text", function() {
-      expect(createResult.dataValues.password)
-        .to
-        .not
-        .equal(user.password);
-    });
+  const user = {
+    username: "username",
+    email: "email@email.com",
+    password: "password"
+  };
 
-    it("should hash the password using bcrypt", function() {
-      expect(createResult.dataValues.password)
-        .to
-        .startWith("$2a$");
-    });
+  test("create() returns userId", function(done) {
+    db
+      .models
+      .User
+      .create(user)
+      .then(function(result) {
+        expect(result.dataValues.userId)
+          .to
+          .exist;
+        done();
+      });
+  });
+
+
+  test("create() does not store password in plaintext", function(done) {
+    db
+      .models
+      .User
+      .create(user)
+      .then(function(result) {
+        expect(result.dataValues.password)
+          .to
+          .not
+          .equal(user.password);
+        done();
+      });
+  });
+
+  test("create() hashes the password using bcrypt", function(done) {
+    db
+      .models
+      .User
+      .create(user)
+      .then(function(result) {
+        expect(result.dataValues.password)
+          .to
+          .startWith("$2a$");
+        done();
+      });
   });
 });
