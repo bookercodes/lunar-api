@@ -1,7 +1,7 @@
 import dbContext from "sequelize-context";
 
 export default {
-  create(req, res) {
+  create(req, res, next) {
 
     const model = {
       username: req.body.username,
@@ -16,8 +16,8 @@ export default {
       .then(function(user) {
         res.sendStatus(201);
       })
-      .catch(dbContext.Sequelize.UniqueConstraintError, function(err) {
-        res.sendStatus(400);
+      .catch(function(err) {
+        next(err);
       });
   }
 };

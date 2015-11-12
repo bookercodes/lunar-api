@@ -70,7 +70,7 @@ suite("users routes", function() {
             }
           })
           .then(function(user) {
-            expect(user).to.exist;
+            expect(user, "user wasn't stored in the db").to.exist;
           });
       });
 

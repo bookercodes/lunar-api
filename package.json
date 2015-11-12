@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "babel": "^5.8.34",
     "babel-core": "^5.8.33",
     "bcryptjs": "^2.3.0",
     "bluebird": "^3.0.5",
