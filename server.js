@@ -6,6 +6,7 @@ import dbContext from "sequelize-context";
 import prettyError from "pretty-error";
 import process from "process";
 import errorHandler from "errorhandler";
+import notFoundHandler from "./middleware/notFoundHandler";
 
 dbContext.connect(config.database, config.username, config.password, {
   logging: false,
@@ -17,6 +18,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(routes);
 app.use(errorHandler());
+app.use(notFoundHandler);
 app.disable('etag');
 
 app.use(function(err, req, res, next) {

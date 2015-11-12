@@ -1,7 +1,7 @@
 import chai from "chai";
 import config from "config";
 import db from "sequelize-context";
-import server from "../../server.js";
+import server from "../../../server.js";
 import request from "supertest-as-promised";
 
 const expect = chai.expect;
