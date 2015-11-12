@@ -22,21 +22,39 @@ suite("users routes", function() {
       .expect(400);
   });
 
-  test("post with invalid req body should return status code 400 and errors", function(
-    done) {
-    return request(server)
-      .post("/users")
-      .send({
-        username: "",
-        password: "",
-        email: ""
-      })
-      .end(function(err, res) {
-        expect(res.status).to.equal(400);
-        expect(res.body).to.have.length(3);
-        done();
-      });
-  });
+  test(
+    "post with invalid req body should return status code 400 and errors",
+    function(
+      done) {
+      return request(server)
+        .post("/users")
+        .send({
+          username: "",
+          password: "",
+          email: ""
+        })
+        .end(function(err, res) {
+          expect(res.status).to.equal(400);
+          const expected = {
+            message: "Validation failed",
+            errors: [{
+              path: "username",
+              message: "\"username\" is not allowed to be empty"
+            }, {
+              path: "password",
+              message: "\"password\" is not allowed to be empty"
+            }, {
+              path: "email",
+              message: "\"email\" is not allowed to be empty"
+            }]
+          }
+          expect(res.body)
+            .to
+            .eql(expected);
+          expect(res.body.errors).to.have.length(3);
+          done();
+        });
+    });
 
 
   test("post with valid req body should return status code 201", function() {
@@ -51,7 +69,7 @@ suite("users routes", function() {
   });
 
 
-  test("post with valid req body should store user in the db", function () {
+  test("post with valid req body should store user in the db", function() {
     const user = {
       username: "username1",
       password: "passw0rd",

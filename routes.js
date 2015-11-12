@@ -11,7 +11,10 @@ router
       .validateBody(req, res)
       .then(function(errors) {
         if (errors.length > 1) {
-          res.status(400).json(errors);
+          res.status(400).json({
+            message: "Validation failed",
+            errors: errors
+          });
         } else {
           next();
         }
