@@ -7,7 +7,7 @@
 _Creates a user record in the db._
 
 ```
-<em>GET /users/</em>
+GET /users
 ```
 
 **Parameters**
@@ -22,9 +22,9 @@ _Creates a user record in the db._
 
 ```json
 {
-  username: "alexbooker",
-  email: "alexbooker@fastmail.im"
-  password "Q35mBFGPYHIl9DMMcIt5",
+  "username": "alexbooker",
+  "email": "alexbooker@fastmail.im"
+  "password" "Q35mBFGPYHIl9DMMcIt5",
 }
 ```
 
@@ -36,7 +36,7 @@ Status 201: Created
 
 ```json
 {
-  message: "User created."
+  "message": "User created."
 }
 ```
 
@@ -48,15 +48,15 @@ Status 400: Bad Request
 
 ```json
 {
-  message: "Validation error",
-  errors: [
+  "message": "Validation error",
+  "errors": [
     {
-      path: "username",
-      message: "\"username\" is not allowed to be empty"
+      "path": "username",
+      "message": "\"username\" is not allowed to be empty"
     },
     {
-      path: "password",
-      message: "\"password\" is not allowed to be empty"
+      "path": "password",
+      "message": "\"password\" is not allowed to be empty"
     }
   ]
 }
