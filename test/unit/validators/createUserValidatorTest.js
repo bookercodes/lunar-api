@@ -74,7 +74,7 @@ suite("createUserValidator", function() {
     "username longer than 30 chars": new Array(31 + 1).join("x")
   };
   for (const key in invalidUsernames) {
-    test(`validateBody() with ${key} should return an error`, function() {
+    test(`validateBody() with ${key} should return an error`, function(done) {
       // setup
       const invalidUsername = invalidUsernames[key];
       const validateAvailabilityStub = function() {
@@ -94,13 +94,14 @@ suite("createUserValidator", function() {
       sut
         .validateBody(req, res)
         .then(function(errors) {
-          // verify
           expect(errors)
             .to
             .have
             .length(1,
               `expected input "${invalidUsername}" to cause an error, but it didn't.`
             );
+          done();
+          // verify
           expect(errors[0].message)
             .to
             .contain("username");

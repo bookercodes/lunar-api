@@ -13,19 +13,7 @@ suite("util", function() {
       .empty;
   });
 
-  test("extractErrors() returns empty array if input is empty array",
-    function() {
-      const input = [];
-
-      const actual = sut.extractErrors(input);
-
-      expect(actual)
-        .to
-        .be
-        .empty;
-    });
-
-  test("extractErrors() returns array", function() {
+  test("extractErrors() should return an array", function() {
     const input = [{
       message: "\"username\" cannot be empty",
       path: "username"
@@ -39,7 +27,19 @@ suite("util", function() {
       .instanceof(Array);
   });
 
-  test("extractErrors() returns unmodified error message and path",
+  test("extractErrors() with empty array should return an empty array",
+    function() {
+      const input = [];
+
+      const actual = sut.extractErrors(input);
+
+      expect(actual)
+        .to
+        .be
+        .empty;
+    });
+
+  test("extractErrors() should return unmodified error message and path",
     function() {
       const input = [{
         message: "\"username\" cannot be empty",
@@ -58,7 +58,7 @@ suite("util", function() {
         .eql(expected);
     });
 
-  test("extractErrors() returns message and path properties only",
+  test("extractErrors() should return message and path properties only",
     function() {
       const input = [{
         message: "\"username\" cannot be empty",
@@ -78,7 +78,7 @@ suite("util", function() {
         .eql(expected);
     });
 
-  test("extractErrors() returns one error per path", function() {
+  test("extractErrors() should only return one error per path", function() {
     const input = [{
       message: "\"username\" cannot be empty",
       path: "username"
@@ -121,7 +121,7 @@ suite("util", function() {
       .eql(expected);
   });
 
-  test("extractErrors() returns correct result", function() {
+  test("extractErrors() should return correct result", function() {
     const input = [{
       message: "\"username\" cannot be empty",
       path: "username"
