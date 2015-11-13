@@ -14,7 +14,9 @@ export default {
       .User
       .create(model)
       .then(function(user) {
-        res.sendStatus(201);
+        res.status(201).json({
+          message: "User created."
+        });
       })
       .catch(function(err) {
         next(err);

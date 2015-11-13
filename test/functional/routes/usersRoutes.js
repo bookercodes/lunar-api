@@ -68,6 +68,20 @@ suite("users routes", function() {
       .expect(201);
   });
 
+  test("post with valid req body should return correct message", function() {
+    return request(server)
+      .post("/users")
+      .send({
+        username: "username1",
+        password: "passw0rd",
+        email: "username@domain.com"
+      })
+      .then(function(res) {
+        expect(res.body.message).to.equal("User created.");
+      });
+  });
+
+
 
   test("post with valid req body should store user in the db", function() {
     const user = {
