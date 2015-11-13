@@ -91,7 +91,19 @@ suite("users routes", function() {
             expect(user, "user wasn't stored in the db").to.exist;
           });
       });
+  });
 
+  test("post with one invalid field returns status code 400", function() {
+    return request(server)
+      .post("/users")
+      .send({
+        username: "",
+        password: "some password",
+        email: "foo@domain.com"
+      })
+      .then(function(res) {
+        expect(res.status).to.equal(400);
+      });
   });
 
 });
