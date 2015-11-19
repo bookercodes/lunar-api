@@ -17,10 +17,10 @@ router
             errors: errors
           });
         } else {
-          // todo
+          next();
         }
       });
-  });
+  }, users.authenticate);
 router
   .route("/users")
   .post(function(req, res, next) {

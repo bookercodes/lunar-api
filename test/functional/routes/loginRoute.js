@@ -2,10 +2,76 @@ import chai from "chai";
 import config from "config";
 import server from "../../../server.js";
 import request from "supertest-as-promised";
+import db from "sequelize-context";
 
 const expect = chai.expect;
 
 suite("authenticate routes", function() {
+
+  setup(function() {
+    return db
+      .connection
+      .sync({
+        force: true
+      });
+  });
+
+  test("login after register with same credentials returns 200 and success message",
+    function() {
+      const user = {
+        username: "username1",
+        password: "passw0rd",
+        email: "username@domain.com"
+      };
+      const supertest = request(server);
+      return supertest
+        .post("/users")
+        .send(user)
+        .then(function (res) {
+          return supertest
+            .post("/login")
+            .send({
+              username: user.username,
+              password: user.password
+            })
+            .then(function (res) {
+              expect(res.status)
+                .to
+                .equal(200);
+              expect(res.body)
+                .to
+                .eql({
+                  message: "Authenticated"
+                });
+            });
+        });
+    });
+
+  test("post with invalid credentials should return status 200 and 'incorrect credentials' message",
+    function() {
+      return request(server)
+        .post("/login/")
+        .send({
+          username: "username",
+          password: "passw0rd"
+        })
+        .then(function(res) {
+          expect(res.status)
+            .to
+            .equal(200);
+          expect(res.body)
+            .to
+            .eql({
+              message: "Invalid credentials",
+              errors: [
+                {
+                  message: "Username or password is incorrect."
+                }
+              ]
+            });
+        });
+    });
+
   test("post with empty req body shold returns status code 400",
     function() {
       return request(server)
