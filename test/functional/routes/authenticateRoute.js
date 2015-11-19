@@ -1,11 +1,9 @@
 import chai from "chai";
 import config from "config";
-// import db from "sequelize-context";
 import server from "../../../server.js";
 import request from "supertest-as-promised";
 
 const expect = chai.expect;
-
 
 suite("authenticate routes", function() {
   test("post with empty req body shold returns status code 400",
@@ -43,4 +41,15 @@ suite("authenticate routes", function() {
             .length(2);
         });
     });
+
+
+  test("post with one invalid field returns status code 400", function() {
+    return request(server)
+      .post("/login")
+      .send({
+        username: "",
+        password: "some password",
+      })
+      .expect(400);
+  });
 });
