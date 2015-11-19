@@ -1,6 +1,6 @@
 import Promise from "bluebird";
 import joi from "joi";
-import util from "../lib/util"
+import util from "../lib/util";
 
 const loginValidator = {};
 

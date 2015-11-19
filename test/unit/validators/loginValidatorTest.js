@@ -6,7 +6,10 @@ const expect = chai.expect;
 suite("loginValidator", function() {
 
   test("exports module", function() {
+    // setup
     const sut = require("../../../validators/loginValidator.js");
+
+    // verify
     expect(sut)
       .to
       .not
@@ -16,6 +19,7 @@ suite("loginValidator", function() {
 
   test("validateBody() returns an empty error array when input is valid",
     function() {
+      // setup
       const sut = require("../../../validators/loginValidator.js");
       const req = httpMocks.createRequest({
         body: {
@@ -24,6 +28,9 @@ suite("loginValidator", function() {
         }
       });
       const res = {};
+
+      // exercise
+      // verify
       return expect(sut.validateBody(req, res))
         .to
         .eventually
@@ -74,7 +81,6 @@ suite("loginValidator", function() {
     });
   }
 
-
   const invalidPasswords = {
     "empty password": "",
     "password shorer than 6 chars": "passw",
@@ -113,6 +119,4 @@ suite("loginValidator", function() {
         });
     });
   }
-
-
 });
