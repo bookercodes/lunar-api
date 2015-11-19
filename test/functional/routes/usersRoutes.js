@@ -47,7 +47,7 @@ suite("users routes", function() {
               path: "email",
               message: "\"email\" is not allowed to be empty"
             }]
-          }
+          };
           expect(res.body)
             .to
             .eql(expected);
