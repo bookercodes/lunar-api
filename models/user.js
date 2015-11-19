@@ -45,6 +45,26 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     classMethods: {
+      authenticate: function (username, password) {
+        return new Promise(function(resolve) {
+          User
+            .findOne({
+              where: {
+                username: username
+              }
+            })
+            .then(function (user) {
+              if (!user) {
+                resolve(false);
+              } else {
+                const success = bcrypt.compareSync(
+                  password,
+                  user.dataValues.password);
+                resolve(success);
+              }
+            });
+        });
+      },
       validateAvailability: function(field, value) {
         return new Promise(function(resolve) {
           User

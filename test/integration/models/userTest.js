@@ -25,6 +25,44 @@ suite("userModel", function() {
       });
   });
 
+  test("authenticate() with invalid credentials returns false",
+    function() {
+      return db
+        .models
+        .User
+        .authenticate("username", "password")
+        .then(function (success) {
+          expect(success)
+            .to
+            .be
+            .false;
+        });
+    });
+
+  test("authenticate() with valid credentials returns true", function() {
+    const user = {
+      username: "username",
+      email: "email@email.com",
+      password: "password"
+    };
+    return db
+      .models
+      .User
+      .create(user)
+      .then(function () {
+        return db
+          .models
+          .User
+          .authenticate(user.username, user.password)
+          .then(function(success) {
+            expect(success)
+              .to
+              .be
+              .true;
+          });
+      });
+  });
+
   test(
     "validateAvailability() with unavailable field should return an error",
     function() {
