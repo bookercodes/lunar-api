@@ -21,5 +21,5 @@ export default {
       .catch(function(err) {
         next(err);
       });
-  }
+  },
 };

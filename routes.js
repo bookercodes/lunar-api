@@ -5,6 +5,11 @@ const router = express.Router();
 
 import users from "./controllers/usersController";
 router
+  .route("/login")
+  .post(function (req,res,next) {
+    res.sendStatus(400);
+  });
+router
   .route("/users")
   .post(function(req, res, next) {
     createUserValidator
