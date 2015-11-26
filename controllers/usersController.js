@@ -1,4 +1,6 @@
 import dbContext from "sequelize-context";
+import jwt from "jsonwebtoken";
+import config from "config";
 
 export default {
   authenticate(req, res, next) {
@@ -8,11 +10,12 @@ export default {
       .authenticate(req.body.username, req.body.password)
       .then(function(success) {
         if (success) {
+          const token = jwt.sign(req.body.username, config.secret);
           return res
             .status(200)
             .send({
               message: "Authenticated",
-              token: "",
+              token: token,
             });
         }
         return res

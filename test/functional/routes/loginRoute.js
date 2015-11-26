@@ -17,7 +17,7 @@ suite("authenticate routes", function() {
   });
 
 
-  test("login with valid credentials returns 200", function() {
+  test("login with valid credentials returns JWT token", function() {
     const user = {
       username: "username",
       password: "password1",
@@ -41,6 +41,7 @@ suite("authenticate routes", function() {
               .equal(200);
             expect(res.body.message).to.equal("Authenticated");
             expect(res.body.token).to.exist;
+            expect(res.body.token).to.match(/^.*\..*\..*$/);
           });
       })
   });
