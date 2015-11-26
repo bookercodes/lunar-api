@@ -12,6 +12,7 @@ export default {
             .status(200)
             .send({
               message: "Authenticated",
+              token: "",
             });
         }
         return res

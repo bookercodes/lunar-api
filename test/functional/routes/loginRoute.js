@@ -23,14 +23,13 @@ suite("authenticate routes", function() {
       password: "password1",
       email: "username@domain.com"
     };
-    db
+    return db
       .models
       .User
       .create(user)
       .then(function() {
-        
         const supertest = request(server);
-        return supertest(server)
+        return supertest
           .post("/login")
           .send({
             username: user.username,
@@ -40,11 +39,8 @@ suite("authenticate routes", function() {
             expect(res.status)
               .to
               .equal(200);
-            expect(res.body)
-              .to
-              .eql({
-                message: "Authenticated"
-              });
+            expect(res.body.message).to.equal("Authenticated");
+            expect(res.body.token).to.exist;
           });
       })
   });
@@ -71,11 +67,7 @@ suite("authenticate routes", function() {
               expect(res.status)
                 .to
                 .equal(200);
-              expect(res.body)
-                .to
-                .eql({
-                  message: "Authenticated"
-                });
+              expect(res.body.message).to.equal("Authenticated");
             });
         });
     });
