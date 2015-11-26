@@ -16,6 +16,39 @@ suite("authenticate routes", function() {
       });
   });
 
+
+  test("login with valid credentials returns 200", function() {
+    const user = {
+      username: "username",
+      password: "password1",
+      email: "username@domain.com"
+    };
+    db
+      .models
+      .User
+      .create(user)
+      .then(function() {
+        
+        const supertest = request(server);
+        return supertest(server)
+          .post("/login")
+          .send({
+            username: user.username,
+            password: user.password
+          })
+          .then(function (res) {
+            expect(res.status)
+              .to
+              .equal(200);
+            expect(res.body)
+              .to
+              .eql({
+                message: "Authenticated"
+              });
+          });
+      })
+  });
+
   test("login after register with same credentials returns 200 and success message",
     function() {
       const user = {
