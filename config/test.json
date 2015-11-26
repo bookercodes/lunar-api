@@ -2,6 +2,7 @@
   "database": "lunar_schema",
   "password": "",
   "dialect": "mysql",
-  "username": "root"
+  "username": "root",
+  "secret": "i like vb.net"
 }
 
