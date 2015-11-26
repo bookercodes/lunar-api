@@ -9,6 +9,7 @@
     "errorhandler": "^1.4.2",
     "express": "^4.13.3",
     "joi": "^6.10.0",
+    "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
     "mysql": "^2.9.0",
     "pretty-error": "^1.2.0",
