@@ -1,6 +1,6 @@
 'use strict';
-module.exports = function(sequelize, DataTypes) {
-  var Task = sequelize.define("Task", {
+module.exports = function (sequelize, DataTypes) {
+  var Task = sequelize.define('Task', {
     taskId: {
       autoIncrement: true,
       primaryKey: true,
@@ -9,22 +9,22 @@ module.exports = function(sequelize, DataTypes) {
     text: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
     authorId: {
       allowNull: false,
       type: DataTypes.INTEGER
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: DataTypes.DATE
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: DataTypes.DATE
     }
   }, {
     classMethods: {
-      associate: function(models) {
+      associate: function (models) {
         Task.belongsTo(models.User, {
           foreignKey: 'userId'
         });
