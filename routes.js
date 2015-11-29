@@ -4,6 +4,11 @@ import loginValidator from "./validators/loginValidator";
 
 const router = express.Router();
 
+import tasks from "./controllers/tasksController";
+router
+  .route("/users/:uid/tasks")
+  .get(tasks.sendTasksForUser);
+
 import users from "./controllers/usersController";
 router
   .route("/login")
