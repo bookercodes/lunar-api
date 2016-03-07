@@ -7,7 +7,7 @@
 _Creates a user record in the db._
 
 ```
-GET /users
+POST /users
 ```
 
 **Parameters**
@@ -23,8 +23,8 @@ GET /users
 ```json
 {
   "username": "alexbooker",
-  "email": "alexbooker@fastmail.im"
-  "password" "Q35mBFGPYHIl9DMMcIt5",
+  "email": "alexbooker@fastmail.im",
+  "password": "Q35mBFGPYHIl9DMMcIt5"
 }
 ```
 
